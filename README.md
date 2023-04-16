@@ -11,6 +11,7 @@ Efishery testcase application
 
 ## Running
 ### Installation
+1. Install app
 Using npm 
 ```bash
 npm install
@@ -18,6 +19,12 @@ npm install
 Using yarn 
 ```bash
 yarn install
+```
+
+2. Create `.env` file from `.env.example`
+```env
+API_URL="https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4"
+CURRENCY_CONVERTER_URL="https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd/idr.json"
 ```
 ### Running command
 Using node 
