@@ -1,19 +1,11 @@
 import http from './http.js';
-import caching from './caching-controller.js';
+import statistic from './controllers/statistic-controlller.js';
 import {v4 as uuidv4} from 'uuid';
 
 const getAllData = async () => {
-  const valuesCache  = caching.getCache('getAllData');
-  if (valuesCache) {
-    return valuesCache;
-  }
   const { data } = await http.get('/list').catch(e => {
     return Promise.reject(e?.response?.data || e);
   });
-  const cache = caching.setCache('getAllData', data);
-  if (!cache) {
-    Promise.reject('error');
-  }
   return data;
 }
 const getOptionArea = async () => {
@@ -28,11 +20,34 @@ const getOptionSize = async () => {
   });
   return data;
 }
-const getAllByRange = async ({price, size, date}) => {
-  const payload = {search: JSON.stringify({uuid: Id})}
-  const { data } = await http.get('/list', {params: payload}).catch(e => {
+const getAllByRange = async (payload) => {
+  const { data } = await http.get('/list').catch(e => {
     return Promise.reject(e?.response?.data || e);
   });
+  if (payload.rangeof === 'date') {
+    const newdata = data.filter((o) => {
+      const enddate = new Date(payload.to);
+      enddate.setDate(new Date(payload.to).getDate() + 1);
+      if (new Date(payload.from).getTime() <= parseInt(o.timestamp) && enddate.getTime() > parseInt(o.timestamp)) {
+        return o;
+      }
+    })
+    return newdata;
+  } else if (payload.rangeof === 'size') {
+    const newdata = data.filter((o) => {
+      if (parseInt(payload.from) <= parseInt(o.size) && parseInt(payload.to) > parseInt(o.size)) {
+        return o;
+      }
+    })
+    return newdata;
+  } else if (payload.rangeof === 'price') {
+    const newdata = data.filter((o) => {
+      if (parseInt(payload.from) <= parseInt(o.price) && parseInt(payload.to) > parseInt(o.price)) {
+        return o;
+      }
+    })
+    return newdata;
+  }
   return data;
 }
 const getById = async ({Id}) => {
@@ -85,6 +100,18 @@ const deleteDataById = async ({Id}) => {
   });
   return data;
 }
+const getMostRecordByComodity = async () => {
+  const { data } = await http.get('/list').catch(e => {
+    return Promise.reject(e?.response?.data || e);
+  });
+  return statistic.fetchToMostRecords(data);
+}
+const getMaxPrice = async () => {
+  const { data } = await http.get('/list').catch(e => {
+    return Promise.reject(e?.response?.data || e);
+  });
+  return statistic.fetchToMaxPrices(data);
+}
 // Export all methods
 export default {   
   getAllData,
@@ -93,7 +120,10 @@ export default {
   getById,
   getByArea,
   getByComodity,
+  getAllByRange,
   addData,
   updateData,
   deleteDataById,
+  getMostRecordByComodity,
+  getMaxPrice
 };
