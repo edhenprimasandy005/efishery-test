@@ -215,7 +215,13 @@ program.command('deleteDataById <_id>').description('delete data by id').action(
     console.log(res);
   }).catch(e => console.log(e))
 })
-
+program.command('get10Latest').description('get 10 lates data').action(() => {
+  pkg.get10Latest().then((res) => {
+    fetch.fetchData(res).then((datas) => {
+      console.log(datas);
+    });
+  }).catch(e => console.log(e))
+})
 // Statistic module
 program.command('getMostRecord').description('get most record by comodity').action(() => {
   pkg.getMostRecordByComodity().then((res) => {

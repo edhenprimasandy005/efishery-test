@@ -112,6 +112,13 @@ const getMaxPrice = async () => {
   });
   return statistic.fetchToMaxPrices(data);
 }
+const get10Latest = async () => {
+  const { data } = await http.get('/list').catch(e => {
+    return Promise.reject(e?.response?.data || e);
+  });
+
+  return data.slice(Math.max(data.length - 5, 1));
+}
 // Export all methods
 export default {   
   getAllData,
@@ -125,5 +132,6 @@ export default {
   updateData,
   deleteDataById,
   getMostRecordByComodity,
-  getMaxPrice
+  getMaxPrice,
+  get10Latest
 };
