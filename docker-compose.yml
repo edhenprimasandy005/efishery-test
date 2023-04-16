@@ -1,0 +1,10 @@
+version: "3"
+services:
+  efishery-test:
+    image: node:latest
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: npm run command
+    stdin_open: true
+    tty: true
