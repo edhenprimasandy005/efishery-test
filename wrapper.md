@@ -276,3 +276,25 @@ Response data from this endpoint will be remaping and grouping to get max prices
   }
 }
 ```
+
+### get10Latest
+`GET /list`
+
+*Response*
+> HTTP 200 : Example Response
+
+```json
+[
+  {
+    "uuid": "877a3851-0942-4b6d-b933-7b3c22ac3ed7",
+    "komoditas": "BANDENG",
+    "area_provinsi": "JAWA TIMUR",
+    "area_kota": "JEMBER",
+    "size": "40",
+    "price": "19000",
+    "tgl_parsed": "2022-01-02T07:15:37Z",
+    "timestamp": "1641107737533"
+  },
+  ...
+]
+```
